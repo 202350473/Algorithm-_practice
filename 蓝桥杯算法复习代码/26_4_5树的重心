@@ -1,0 +1,37 @@
+//https://www.acwing.com/problem/content/848/
+
+//-----树的重心---类似去做蓝桥：帮派弟位
+
+#include<bits/stdc++.h>
+using namespace std;
+const int N=1e5+10;
+vector<int> g[N];
+int n;
+int sizes[N];//存子树的大小
+int minn=1e6;
+//搜索返回删除重心后的最大子树值，
+//删掉，小弟最多的那个节点(需要知道他的编号)，比较剩下的联通块的大小，返回最大值
+int dfs(int a,int pa){//求的是父节点是pa的子树的大小么？？   
+    sizes[a]=1;
+    int max_part=0;
+    //遍历
+    for(const auto&t:g[a]){
+        if(t==pa)continue;
+        dfs(t,a);
+        sizes[a]=sizes[a]+sizes[t];
+        max_part=max(max_part,sizes[t]);
+    }
+    max_part=max(max_part,n-sizes[a]);
+    minn=min(minn,max_part);
+    return minn;
+}
+int main(){
+    cin>>n;
+    for(int i=1;i<n;i++){
+        int a,b;cin>>a>>b;
+        g[a].push_back(b);
+        g[b].push_back(a);
+    }
+    cout<<dfs(1,0)<<'\n';
+    return 0;
+}
