@@ -1,0 +1,81 @@
+//题目链接：https://www.acwing.com/problem/content/97/
+
+
+#include<bits/stdc++.h>
+using namespace std;
+const int N=10;
+char g[N][N];
+int dx[]={0,-1,1,0,0};
+int dy[]={0,0,0,-1,1};
+//int button 
+void button(int x,int y){
+    //按下开关
+    for(int i=0;i<=4;i++){
+        int ix=x+dx[i],iy=y+dy[i];
+        if(ix>0&&ix<6&&iy>0&&iy<6){
+        //   if(g[x+ix][y+iy]|1){
+        //       g[x+ix][y+iy]=0;
+        //   }else  g[x+ix][y+iy]=1;
+        g[ix][iy]^=1;
+        }
+    }
+    
+}
+
+//进去一次处理所有的情况并返回答案，不需要递归
+int dfs(){
+    int res=0,step=1e5;;
+    //遍历1行，分析得知，第一行一共有32中不同的情况，可以用1-32来表示没种情况
+    for(int k=0;k<=31;k++){
+        res=0;
+        //这里用到了备份是因为，我这次变化不一定是成功的，不成功的话我需要恢复越来的状态
+        char backup[N][N];
+        memcpy(backup,g,sizeof(backup));
+        //是算一下首行的开关次数么？？，应该是需要把第一样实现成K的样子
+        for(int j=1;j<=5;j++){
+            //第一行第一列
+            if(k>>(j-1)&1){//把第j位移动到个位，判断这一位是不是1，是1就要按下去（位数是从0开始的）
+                res++;
+                button(1,j);
+        }
+        }
+        //2-5行吧
+        for(int i=1;i<=4;i++){
+            //如果上一行是0的话，这一行这个位置必须按下去
+            for(int j=1;j<=5;j++){
+                if(g[i][j]=='0'){res++;button(i+1,j);}
+            }
+        }
+        
+        bool yes=true;
+        //最后检测最后一行是不是全1
+        for(int j=1;j<=5;j++){
+            if(g[5][j]=='0'){
+                yes=false;//返回原来的状态，并且return -1
+                break;
+            }
+        }  
+        if(yes) step=min(res,step);
+        
+        memcpy(g,backup,sizeof(g));
+       
+        }  //遍历2-n-1行
+        if(step>6)step=-1;
+        
+        return step;
+}
+int main(){
+    int n;cin>>n;
+    while(n--){
+        
+    //解决一组问题
+      for(int i=1;i<=5;i++){
+          for(int j=1;j<=5;j++){
+              cin>>g[i][j];
+          }
+        }
+    cout<<dfs()<<'\n';
+    
+}
+    return 0;
+}
