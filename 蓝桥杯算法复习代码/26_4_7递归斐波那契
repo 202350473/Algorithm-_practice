@@ -1,0 +1,23 @@
+//https://www.acwing.com/problem/content/719/
+#include<bits/stdc++.h>
+using namespace std;
+
+const int N=50;
+int a[N];
+
+//是不是有一个记忆化，后来再有重复就不用再搜索了:哇哦，是的耶！！！
+int dfs(int x){
+    if(a[x]!=0)return a[x];
+    if(x==0)return 0;
+    else 
+    if(x==1||x==2)return 1;
+    else{a[x]=dfs(x-1)+dfs(x-2); return a[x];}
+}
+
+int main(){
+    int n;cin>>n;
+    a[1]=a[2]=1;
+    dfs(n);
+    for(int i=0;i<n;i++)cout<<a[i]<<' ';
+    return 0;
+}

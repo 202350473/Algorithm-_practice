@@ -1,0 +1,31 @@
+//https://www.acwing.com/problem/content/96/
+#include<bits/stdc++.h>
+using namespace std;
+const int N=15;
+int a[N],n;
+bool st[N];
+
+//给x这个位置选一个合适的值
+void dfs(int x){
+    //出口
+    if(x>n){
+        for(int i=1;i<=n;i++)cout<<a[i]<<" ";
+        cout<<'\n';
+        return ;
+    }
+    //搜索这个位置可以填的值赋给它
+    for(int i=1;i<=n;i++){
+        if(!st[i]){
+            a[x]=i;
+            st[i]=true;
+            dfs(x+1);
+            st[i]=false;
+            a[x]=0;
+        }
+    }
+}
+int main(){
+    cin>>n;
+    dfs(1);
+    return 0;
+}
